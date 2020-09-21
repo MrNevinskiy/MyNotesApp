@@ -6,50 +6,59 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
 import com.hw.mynotesapp.R
 import com.hw.mynotesapp.mvvm.model.Note
+import com.hw.mynotesapp.mvvm.view.NoteViewState
 import com.hw.mynotesapp.mvvm.viewmodel.NoteViewModel
-import kotlinx.android.synthetic.main.item_note.*
+import com.hw.mynotesapp.ui.activity.base.BaseActivity
 import kotlinx.android.synthetic.main.note_activity.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class NoteActivity : AppCompatActivity() {
+class NoteActivity : BaseActivity<Note?, NoteViewState>() {
     companion object {
         private const val NOTE_KEY = "note"
-        private const val DATE_FORMAT = "dd.MM.yy HH.mm"
+        private const val DATE_FORMAT = "dd.MM.yy HH:mm"
 
-        fun start(context: Context, note: Note? = null) = Intent(context, NoteActivity::class.java).apply {
-            putExtra(NOTE_KEY, note)
+        fun start(context: Context, noteId: String? = null) = Intent(context, NoteActivity::class.java).apply {
+            putExtra(NOTE_KEY, noteId)
             context.startActivity(this)
         }
     }
 
-        private var  note: Note? = null
-        lateinit var  viewModel: NoteViewModel
+    override val layoutRes: Int = R.layout.note_activity
+    private var note: Note? = null
+    override val viewModel by lazy {
+        ViewModelProvider(this).get(NoteViewModel::class.java)
+    }
 
     val textWatcher = object:TextWatcher{
-        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-        override fun afterTextChanged(p0: Editable?) {
+        override fun afterTextChanged(s: Editable?) {
             saveNote()
         }
-
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.note_activity)
-
-        note = intent.getParcelableExtra(NOTE_KEY)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        viewModel = ViewModelProvider(this).get(NoteViewModel::class.java)
+        val noteId = intent.getStringExtra(NOTE_KEY)
 
+        noteId?.let {
+            viewModel.loadNote(it)
+        } ?: let {
+            supportActionBar?.title =  getString(R.string.new_note)
+            initView()
+        }
+    }
+
+    override fun renderData(data: Note?) {
+        this.note = data
         supportActionBar?.title = note?.let {
             SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(it.lastChanged)
         } ?: getString(R.string.new_note)
@@ -57,6 +66,9 @@ class NoteActivity : AppCompatActivity() {
     }
 
   private fun initView(){
+      titleEt.removeTextChangedListener(textWatcher)
+      bodyEt.removeTextChangedListener(textWatcher)
+
       note?.let{
           titleEt.setText(it.title)
           bodyEt.setText(it.body)
@@ -86,7 +98,7 @@ class NoteActivity : AppCompatActivity() {
             lastChanged = Date()
         )?: Note(UUID.randomUUID().toString(),titleEt.text.toString(),bodyEt.text.toString())
 
-        note?.let { viewModel.saveChanges(it) }
+        note?.let { viewModel.save(it) }
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when(item.itemId) {
