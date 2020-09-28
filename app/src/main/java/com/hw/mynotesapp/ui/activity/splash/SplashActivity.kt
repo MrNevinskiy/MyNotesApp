@@ -6,12 +6,12 @@ import com.hw.mynotesapp.mvvm.view.SplashViewState
 import com.hw.mynotesapp.mvvm.viewmodel.SplashViewModel
 import com.hw.mynotesapp.ui.activity.base.BaseActivity
 import com.hw.mynotesapp.ui.activity.main.MainActivity
+import org.koin.android.viewmodel.ext.android.viewModel
+
 
 class SplashActivity : BaseActivity<Boolean?, SplashViewState>(){
 
-    override val viewModel by lazy {
-        ViewModelProvider(this).get(SplashViewModel::class.java)
-    }
+    override val viewModel: SplashViewModel by viewModel()
 
     override val layoutRes = null
 
@@ -19,13 +19,14 @@ class SplashActivity : BaseActivity<Boolean?, SplashViewState>(){
         super.onResume()
         Handler().postDelayed({viewModel.requestUser()}, 1000)
     }
+
     override fun renderData(data: Boolean?) {
         data?.takeIf { it }?.let {
             startMainActivity()
         }
     }
 
-    private fun startMainActivity() {
+    fun startMainActivity(){
         MainActivity.start(this)
         finish()
     }

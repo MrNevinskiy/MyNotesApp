@@ -9,7 +9,7 @@ import com.hw.mynotesapp.mvvm.model.NoteRepository
 import com.hw.mynotesapp.mvvm.model.NoteResult
 import com.hw.mynotesapp.mvvm.view.MainViewState
 
-class MainViewModel() : BaseViewModel<List<Note>?, MainViewState>() {
+class MainViewModel(notesRepository: NoteRepository) : BaseViewModel<List<Note>?, MainViewState>() {
 
     private val notesObserver = Observer<NoteResult> { result ->
         result ?: return@Observer
@@ -19,7 +19,7 @@ class MainViewModel() : BaseViewModel<List<Note>?, MainViewState>() {
         }
     }
 
-    private val repositoryNotes = NoteRepository.getNotes()
+    private val repositoryNotes = notesRepository.getNotes()
 
     init {
         viewStateLiveData.value = MainViewState()

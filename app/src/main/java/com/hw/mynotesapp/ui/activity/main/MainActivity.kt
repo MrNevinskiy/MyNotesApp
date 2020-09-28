@@ -12,6 +12,7 @@ import com.firebase.ui.auth.AuthUI
 import com.google.android.gms.auth.api.Auth
 import com.hw.mynotesapp.R
 import com.hw.mynotesapp.mvvm.model.Note
+import com.hw.mynotesapp.mvvm.model.provider.FirestoreProvider
 import com.hw.mynotesapp.mvvm.view.MainViewState
 import com.hw.mynotesapp.mvvm.viewmodel.MainViewModel
 import com.hw.mynotesapp.ui.activity.base.BaseActivity
@@ -20,8 +21,12 @@ import com.hw.mynotesapp.ui.activity.note.NoteActivity
 import com.hw.mynotesapp.ui.activity.splash.SplashActivity
 import com.hw.mynotesapp.ui.common.LogoutDialog
 import kotlinx.android.synthetic.main.activity_main.*
+import org.koin.android.ext.android.inject
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity : BaseActivity<List<Note>?, MainViewState>(), LogoutDialog.LogoutListener {
+
+    val firestoreProvider: FirestoreProvider by inject()
 
     companion object{
         fun start(context: Context) = Intent(context, MainActivity::class.java).apply {
@@ -29,17 +34,15 @@ class MainActivity : BaseActivity<List<Note>?, MainViewState>(), LogoutDialog.Lo
         }
     }
 
-    override val viewModel: MainViewModel by lazy {
-        ViewModelProvider(this).get(MainViewModel::class.java)
-    }
+    override val viewModel: MainViewModel by viewModel()
     override val layoutRes: Int = R.layout.activity_main
-
     lateinit var adapter: NotesRVAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setSupportActionBar(toolbar)
+
         rv_note.layoutManager = GridLayoutManager(this, 2)
         adapter = NotesRVAdapter {
             NoteActivity.start(this, it.id)
