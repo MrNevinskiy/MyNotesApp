@@ -1,11 +1,11 @@
 package com.hw.mynotesapp.mvvm.viewmodel
 
 import com.hw.mynotesapp.mvvm.model.Note
-import com.hw.mynotesapp.mvvm.model.NoteRepository
+import com.hw.mynotesapp.mvvm.model.NotesRepository
 import com.hw.mynotesapp.mvvm.model.NoteResult
 import com.hw.mynotesapp.mvvm.view.NoteViewState
 
-class NoteViewModel(val notesRepository: NoteRepository) : BaseViewModel<NoteViewState.Data, NoteViewState>() {
+class NoteViewModel(val notesRepository: NotesRepository) : BaseViewModel<NoteViewState.Data, NoteViewState>() {
 
     init {
         viewStateLiveData.value = NoteViewState()

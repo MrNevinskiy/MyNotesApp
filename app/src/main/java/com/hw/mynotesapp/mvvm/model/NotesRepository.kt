@@ -6,7 +6,7 @@ import com.hw.mynotesapp.mvvm.model.provider.DataProvider
 import com.hw.mynotesapp.mvvm.model.provider.FirestoreProvider
 import java.util.*
 
-class NoteRepository(val dataProvider: DataProvider) {
+class NotesRepository(val dataProvider: DataProvider) {
     fun getCurrentUser() = dataProvider.getCurrentUser()
     fun getNotes() = dataProvider.subscribeToAllNotes()
     fun saveNote(note: Note) = dataProvider.saveNote(note)

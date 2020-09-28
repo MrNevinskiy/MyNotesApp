@@ -5,9 +5,9 @@ import androidx.core.content.ContextCompat
 import com.hw.mynotesapp.R
 import com.hw.mynotesapp.mvvm.model.Note
 
-inline fun Note.Color.getColorInt(context: Context) = ContextCompat.getColor(context, getColorRes())
+inline fun Note.Color.getColorInt(context: Context) = ContextCompat.getColor(context, getColorRes(context))
 
-inline fun Note.Color.getColorRes() = when (this) {
+inline fun Note.Color.getColorRes(context: Context) = when (this) {
     Note.Color.WHITE -> R.color.white
     Note.Color.VIOLET -> R.color.violet
     Note.Color.YELLOW -> R.color.yellow

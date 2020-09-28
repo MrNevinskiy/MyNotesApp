@@ -21,7 +21,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class NoteActivity : BaseActivity<Note?, NoteViewState>() {
+class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
     companion object {
         private const val NOTE_KEY = "note"
         private const val DATE_FORMAT = "dd.MM.yy HH:mm"
@@ -77,7 +77,7 @@ class NoteActivity : BaseActivity<Note?, NoteViewState>() {
 
       note?.let {
           titleEt.setTextKeepState(it.title)
-          bodyEt.setTextKeepState(it.body)
+          bodyEt.setTextKeepState(it.text)
           toolbar.setBackgroundColor(it.color.getColorInt(this))
           SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(it.lastChanged)
       }
@@ -92,18 +92,20 @@ class NoteActivity : BaseActivity<Note?, NoteViewState>() {
       }
   }
 
-    private fun  saveNote(){
+    private fun saveNote() {
         titleEt.text?.let {
-            if (it.length <3) return
+            if (it.length < 3) return
         } ?: return
 
         note = note?.copy(
             title = titleEt.text.toString(),
-            body = bodyEt.text.toString(),
-            lastChanged = Date()
-        )?: Note(UUID.randomUUID().toString(),titleEt.text.toString(),bodyEt.text.toString())
+            text = bodyEt.text.toString(),
+            lastChanged = Date(),
+            color = color
+        ) ?: Note(UUID.randomUUID().toString(), titleEt.text.toString(), bodyEt.text.toString(), color)
 
         note?.let { viewModel.save(it) }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu) = menuInflater.inflate(R.menu.note, menu).let { true }

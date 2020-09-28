@@ -1,7 +1,6 @@
 package com.hw.mynotesapp.ui.activity.splash
 
 import android.os.Handler
-import androidx.lifecycle.ViewModelProvider
 import com.hw.mynotesapp.mvvm.view.SplashViewState
 import com.hw.mynotesapp.mvvm.viewmodel.SplashViewModel
 import com.hw.mynotesapp.ui.activity.base.BaseActivity

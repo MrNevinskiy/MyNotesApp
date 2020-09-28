@@ -5,7 +5,6 @@ import com.hw.mynotesapp.mvvm.model.Note
 import com.hw.mynotesapp.mvvm.model.NoteResult
 import com.hw.mynotesapp.mvvm.model.User
 
-
 interface DataProvider {
     fun getCurrentUser() : LiveData<User?>
     fun subscribeToAllNotes() : LiveData<NoteResult>

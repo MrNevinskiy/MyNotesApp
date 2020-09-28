@@ -31,7 +31,7 @@ class NotesRVAdapter(val onItemClick: ((Note) -> Unit)? = null) : RecyclerView.A
         LayoutContainer {
         fun bind(note: Note) = with(itemView as CardView) {
             card_title.text = note.title
-            card_body.text = note.body
+            card_body.text = note.text
 
             setCardBackgroundColor(note.color.getColorInt(context))
 
