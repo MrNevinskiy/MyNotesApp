@@ -1,11 +1,11 @@
 package com.hw.mynotesapp.mvvm.viewmodel
 
 import com.hw.mynotesapp.mvvm.model.Note
-import com.hw.mynotesapp.mvvm.model.NoteRepository
+import com.hw.mynotesapp.mvvm.model.NotesRepository
 import com.hw.mynotesapp.mvvm.model.NoteResult
 import com.hw.mynotesapp.mvvm.view.NoteViewState
 
-class NoteViewModel : BaseViewModel<Note?, NoteViewState>() {
+class NoteViewModel(val notesRepository: NotesRepository) : BaseViewModel<NoteViewState.Data, NoteViewState>() {
 
     init {
         viewStateLiveData.value = NoteViewState()
@@ -18,18 +18,34 @@ class NoteViewModel : BaseViewModel<Note?, NoteViewState>() {
     }
 
     fun loadNote(noteId: String) {
-        NoteRepository.getNoteById(noteId).observeForever { result ->
+        notesRepository.getNoteById(noteId).observeForever { result ->
             result ?: return@observeForever
-            when(result){
-                is NoteResult.Success<*> ->  viewStateLiveData.value = NoteViewState(note = result.data as? Note)
+            when (result) {
+                is NoteResult.Success<*> -> {
+                    pendingNote = result.data as? Note
+                    viewStateLiveData.value = NoteViewState(NoteViewState.Data(note = pendingNote))
+                }
                 is NoteResult.Error -> viewStateLiveData.value = NoteViewState(error = result.error)
+            }
+        }
+    }
+
+    fun deleteNote() {
+        pendingNote?.let {
+            notesRepository.deleteNote(it.id).observeForever { result ->
+                result ?: return@observeForever
+                pendingNote = null
+                when (result) {
+                    is NoteResult.Success<*> -> viewStateLiveData.value = NoteViewState(NoteViewState.Data(isDeleted = true))
+                    is NoteResult.Error -> viewStateLiveData.value = NoteViewState(error = result.error)
+                }
             }
         }
     }
 
     override fun onCleared() {
         pendingNote?.let {
-            NoteRepository.saveNote(it)
+            notesRepository.saveNote(it)
         }
     }
 

@@ -45,10 +45,6 @@ abstract class BaseActivity<T, S : BaseViewState<T>> : AppCompatActivity() {
                 showError(it)
             }
         }
-
-        error.message?.let {
-            showError(it)
-        }
     }
 
     private fun startLogin(){
