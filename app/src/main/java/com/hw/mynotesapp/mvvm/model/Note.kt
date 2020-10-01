@@ -6,7 +6,7 @@ import java.util.*
 
 @Parcelize
 data class Note(
-    var id: String,
+    var id: String= "",
     var title: String = "",
     var body: String = "",
     var color: Color = Color.WHITE,

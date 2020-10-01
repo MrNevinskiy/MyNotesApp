@@ -39,10 +39,11 @@ class NotesRVAdapter(val onItemClick: ((Note) -> Unit)? = null) : RecyclerView.A
                 Note.Color.GREEN -> R.color.color_green
             }
 
-            itemView.setOnClickListener{
+            setCardBackgroundColor(ContextCompat.getColor(itemView.context, color))
+
+            itemView.setOnClickListener {
                 onItemClick?.invoke(note)
             }
-            setBackgroundColor(ContextCompat.getColor(itemView.context,color))
 
         }
     }
