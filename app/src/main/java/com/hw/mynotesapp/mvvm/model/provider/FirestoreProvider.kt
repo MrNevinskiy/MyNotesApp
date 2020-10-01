@@ -35,7 +35,7 @@ class FirestoreProvider(val firebaseAuth: FirebaseAuth, val store: FirebaseFires
         try {
             notesReference.addSnapshotListener { snapshot, e ->
                 e?.let {
-
+                    value = NoteResult.Error(e)
                 } ?: snapshot?.let {
                     val notes = snapshot.documents.mapNotNull { it.toObject(Note::class.java) }
                     value = NoteResult.Success(notes)

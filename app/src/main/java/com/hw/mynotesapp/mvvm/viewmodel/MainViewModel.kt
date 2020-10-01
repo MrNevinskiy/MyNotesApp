@@ -5,6 +5,7 @@ import com.hw.mynotesapp.mvvm.model.Note
 import com.hw.mynotesapp.mvvm.model.NotesRepository
 import com.hw.mynotesapp.mvvm.model.NoteResult
 import com.hw.mynotesapp.mvvm.view.MainViewState
+import org.jetbrains.annotations.TestOnly
 
 class MainViewModel(notesRepository: NotesRepository) : BaseViewModel<List<Note>?, MainViewState>() {
 
@@ -23,7 +24,8 @@ class MainViewModel(notesRepository: NotesRepository) : BaseViewModel<List<Note>
         repositoryNotes.observeForever (notesObserver)
     }
 
-    override fun onCleared() {
+    @TestOnly
+    public override fun onCleared() {
         super.onCleared()
         repositoryNotes.removeObserver(notesObserver)
     }
