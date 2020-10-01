@@ -4,4 +4,9 @@
     <string name="test_body">Text</string>
     <string name="notes">Notes</string>
     <string name="new_note">New note</string>
+    <string name="logout_menu_title">Exit</string>
+    <string name="logout_dialog_title">Exit</string>
+    <string name="logout_dialog_message">You are sure about that?</string>
+    <string name="ok_btn_title">Yes</string>
+    <string name="logout_dialog_cancel">No</string>
 </resources>
