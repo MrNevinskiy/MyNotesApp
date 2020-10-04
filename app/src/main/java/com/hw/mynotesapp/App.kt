@@ -1,4 +1,4 @@
-package com.hw.mynotesapp.ui
+package com.hw.mynotesapp
 
 import android.app.Application
 import com.hw.mynotesapp.mvvm.model.di.appModule
