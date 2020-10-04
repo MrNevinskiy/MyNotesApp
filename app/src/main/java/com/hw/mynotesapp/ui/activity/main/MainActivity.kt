@@ -9,13 +9,10 @@ import android.view.MenuItem
 import androidx.recyclerview.widget.GridLayoutManager
 import com.firebase.ui.auth.AuthUI
 import kotlinx.android.synthetic.main.activity_main.*
-import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 
 import com.hw.mynotesapp.R
 import com.hw.mynotesapp.mvvm.model.Note
-import com.hw.mynotesapp.mvvm.model.provider.FirestoreProvider
-import com.hw.mynotesapp.mvvm.view.MainViewState
 import com.hw.mynotesapp.mvvm.viewmodel.MainViewModel
 import com.hw.mynotesapp.ui.activity.base.BaseActivity
 import com.hw.mynotesapp.ui.activity.main.recyclerview.NotesRVAdapter
@@ -24,9 +21,7 @@ import com.hw.mynotesapp.ui.activity.splash.SplashActivity
 import com.hw.mynotesapp.ui.common.LogoutDialog
 
 
-class MainActivity : BaseActivity<List<Note>?, MainViewState>(), LogoutDialog.LogoutListener {
-
-    val firestoreProvider: FirestoreProvider by inject()
+class MainActivity : BaseActivity<List<Note>?>(), LogoutDialog.LogoutListener {
 
     companion object {
         fun start(context: Context) = Intent(context, MainActivity::class.java).apply {

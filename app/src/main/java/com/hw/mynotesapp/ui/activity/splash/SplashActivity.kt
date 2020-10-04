@@ -8,7 +8,7 @@ import com.hw.mynotesapp.ui.activity.main.MainActivity
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
-class SplashActivity : BaseActivity<Boolean?, SplashViewState>(){
+class SplashActivity : BaseActivity<Boolean?>(){
 
     override val viewModel: SplashViewModel by viewModel()
 

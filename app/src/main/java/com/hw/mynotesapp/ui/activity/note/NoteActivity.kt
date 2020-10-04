@@ -21,7 +21,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
+class NoteActivity : BaseActivity<NoteData>() {
     companion object {
         private const val NOTE_KEY = "note"
         private const val DATE_FORMAT = "dd.MM.yy HH:mm"
@@ -38,10 +38,11 @@ class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
 
     var color: Note.Color = Note.Color.WHITE
 
-    val textWatcher = object:TextWatcher{
+    val textWatcher = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
             saveNote()
         }
+
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
     }
@@ -61,7 +62,7 @@ class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
         }
     }
 
-    override fun renderData(data: NoteViewState.Data) {
+    override fun renderData(data: NoteData) {
         if (data.isDeleted) {
             finish()
             return
@@ -71,26 +72,26 @@ class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
         initView()
     }
 
-  private fun initView(){
-      titleEt.removeTextChangedListener(textWatcher)
-      bodyEt.removeTextChangedListener(textWatcher)
+    private fun initView() {
+        titleEt.removeTextChangedListener(textWatcher)
+        bodyEt.removeTextChangedListener(textWatcher)
 
-      note?.let {
-          titleEt.setTextKeepState(it.title)
-          bodyEt.setTextKeepState(it.text)
-          toolbar.setBackgroundColor(it.color.getColorInt(this))
-          SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(it.lastChanged)
-      }
+        note?.let {
+            titleEt.setTextKeepState(it.title)
+            bodyEt.setTextKeepState(it.text)
+            toolbar.setBackgroundColor(it.color.getColorInt(this))
+            SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(it.lastChanged)
+        }
 
-      titleEt.addTextChangedListener(textWatcher)
-      bodyEt.addTextChangedListener(textWatcher)
+        titleEt.addTextChangedListener(textWatcher)
+        bodyEt.addTextChangedListener(textWatcher)
 
-      colorPicker.onColorClickListener = {
-          color = it
-          toolbar.setBackgroundColor(it.getColorInt(this))
-          saveNote()
-      }
-  }
+        colorPicker.onColorClickListener = {
+            color = it
+            toolbar.setBackgroundColor(it.getColorInt(this))
+            saveNote()
+        }
+    }
 
     private fun saveNote() {
         titleEt.text?.let {
@@ -110,7 +111,7 @@ class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
 
     override fun onCreateOptionsMenu(menu: Menu) = menuInflater.inflate(R.menu.note, menu).let { true }
 
-    override fun onOptionsItemSelected(item: MenuItem) = when(item.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.palette -> togglePallete().let { true }
         R.id.delete -> deleteNote().let { true }
         android.R.id.home -> {
